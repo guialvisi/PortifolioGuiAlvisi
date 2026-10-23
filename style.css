@@ -2265,3 +2265,395 @@ h2 em {
     -webkit-text-fill-color: var(--gold);
   }
 }
+
+/* Responsive layout: desktop / notebook / tablet / phone. */
+:root {
+  --page-gutter: clamp(18px, 5.5vw, 88px);
+}
+
+html {
+  scroll-padding-top: 110px;
+}
+
+.section,
+footer {
+  padding-inline: max(var(--page-gutter), calc((100% - 1450px) / 2));
+}
+
+.section {
+  padding-block: clamp(64px, 7vw, 112px);
+}
+
+.hero {
+  padding-bottom: 0;
+  isolation: isolate;
+}
+
+.brand-strip,
+.brand-finale,
+.showcase > .section-heading {
+  padding-inline: max(var(--page-gutter), calc((100% - 1450px) / 2));
+}
+
+.header {
+  gap: 20px;
+}
+
+.header nav {
+  gap: clamp(18px, 3vw, 38px);
+}
+
+.menu-toggle {
+  display: none;
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text);
+  font: 12px var(--font-mono);
+  min-height: 44px;
+  padding: 10px 14px;
+  align-items: center;
+  gap: 18px;
+  cursor: pointer;
+}
+
+.menu-toggle span {
+  color: var(--gold);
+  font-size: 20px;
+}
+
+.menu-toggle[aria-expanded="true"] span {
+  transform: rotate(45deg);
+}
+
+.menu-toggle:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
+.section-heading {
+  gap: 30px;
+}
+
+.section-heading > *,
+.hero-bottom > *,
+.project-caption > *,
+.budget > *,
+.service > div {
+  min-width: 0;
+}
+
+.project-caption {
+  flex-wrap: wrap;
+  gap: 10px 16px;
+}
+
+.project-caption h3,
+.service h3,
+.process-step h3,
+.form-field label,
+.preview-help {
+  overflow-wrap: anywhere;
+}
+
+.project-caption > span {
+  line-height: 1.6;
+}
+
+.device-controls button,
+.project-details summary,
+.text-link {
+  min-height: 44px;
+}
+
+.brand-mega {
+  font-size: clamp(50px, 15.8vw, 265px);
+}
+
+@media (min-width: 761px) and (max-width: 1200px) {
+  .project-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .project-item {
+    grid-column: auto;
+  }
+
+  .project-featured,
+  .project-item:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .process-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+  }
+
+  .service {
+    grid-template-columns: 30px minmax(0, 1fr) minmax(140px, 180px) 45px;
+    gap: 18px;
+  }
+
+  .about,
+  .budget {
+    gap: 6%;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 900px) {
+  .about,
+  .budget {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
+
+  .about-art.portrait {
+    max-width: 550px;
+    width: 100%;
+    justify-self: center;
+  }
+
+  .about-copy p,
+  .budget-copy p {
+    max-width: 650px;
+  }
+
+  .service-visual {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 760px) {
+  html {
+    scroll-padding-top: 100px;
+  }
+
+  .header {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 72px;
+    gap: 0 14px;
+    padding: 8px 14px;
+  }
+
+  .header .brand {
+    width: 104px;
+  }
+
+  .menu-ready .menu-toggle {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
+  .header nav,
+  .menu-ready .header nav.is-open {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+    padding: 14px 0 6px;
+    margin-top: 8px;
+    border-top: 1px solid var(--line);
+  }
+
+  .menu-ready .header nav:not(.is-open) {
+    display: none;
+  }
+
+  .header nav > a,
+  .header nav > a:first-child,
+  .header nav > a:nth-child(2),
+  .header nav > a[href="#servicos"],
+  .header nav > a[href="#sobre"] {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 10px 12px;
+    font-size: 12px;
+    border-radius: 4px;
+  }
+
+  .header .nav-contact {
+    justify-content: space-between;
+  }
+
+  .hero {
+    padding-top: 40px;
+  }
+
+  .hero-bottom {
+    align-items: center;
+    padding-bottom: 30px;
+  }
+
+  .hero-bottom p {
+    font-size: 14px;
+  }
+
+  .hero-highlights {
+    padding-bottom: 25px;
+  }
+
+  .hero-highlights span,
+  .hero-highlights a {
+    font-size: 10px;
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: .08em;
+  }
+
+  .section-heading {
+    margin-bottom: 32px;
+  }
+
+  .section-heading p,
+  .service p,
+  .about-copy p,
+  .process-step p,
+  .budget-copy p {
+    font-size: 14px;
+  }
+
+  .project-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+
+  .project-item,
+  .project-featured,
+  .project-item:last-child {
+    grid-column: 1;
+  }
+
+  .project-caption > span {
+    max-width: none;
+    text-align: left;
+    font-size: 10px;
+  }
+
+  .project-open,
+  .project-featured .project-open {
+    right: 12px;
+    bottom: 12px;
+    padding: 10px 14px;
+    font-size: 11px;
+  }
+
+  .service {
+    grid-template-columns: 25px minmax(0, 1fr) 44px;
+    gap: 14px;
+    padding: 26px 0;
+  }
+
+  .service > a {
+    grid-column: 3;
+    width: 44px;
+    height: 44px;
+  }
+
+  .service-visual {
+    grid-column: 2 / -1;
+    grid-row: 2;
+    max-width: 420px;
+    opacity: 1;
+    transform: none;
+  }
+
+  .about,
+  .budget {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+
+  .about-art.portrait {
+    max-width: 520px;
+    width: 100%;
+    justify-self: center;
+  }
+
+  .process-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 26px;
+  }
+
+  .budget-form .button {
+    width: 100%;
+    min-height: 52px;
+  }
+
+  footer {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 16px;
+  }
+
+  footer > span {
+    width: auto;
+    font-size: 11px;
+  }
+
+  footer .brand {
+    width: 124px;
+    max-width: 100%;
+  }
+
+  footer > a:last-child {
+    text-align: right;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-actions .button {
+    justify-content: space-between;
+    min-height: 48px;
+    font-size: 13px;
+  }
+
+  .hero-highlights {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .hero-highlights > div {
+    gap: 3px;
+  }
+
+  .hero-highlights strong {
+    font-size: 24px;
+  }
+
+  .process-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .device-controls {
+    gap: 6px;
+  }
+
+  .device-controls button {
+    padding-inline: 10px;
+    font-size: 10px;
+  }
+
+  .statement-text {
+    font-size: clamp(34px, 10vw, 48px);
+    overflow-wrap: anywhere;
+  }
+
+  .contact h2 {
+    font-size: clamp(37px, 10vw, 48px);
+  }
+
+  .contact-link {
+    gap: 16px;
+    font-size: 12px;
+  }
+}
