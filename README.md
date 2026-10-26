@@ -14,7 +14,7 @@ Acesse http://localhost:8000 no navegador.
 
 ## Conteúdo
 
-- Quatro projetos com vídeos e visualizações interativas.
+- Cinco projetos com vídeos e visualizações interativas.
 - Serviços, apresentação pessoal e processo de trabalho.
 - Formulário que prepara a mensagem de orçamento no WhatsApp.
 - Layout responsivo, animações e suporte a movimento reduzido.

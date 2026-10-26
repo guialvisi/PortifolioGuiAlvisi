@@ -132,6 +132,7 @@
     chocolate: 'assets/videos/chocolate-preview.webm',
     royal: 'assets/videos/royal.webm',
     pse: 'assets/videos/pse-preview.webm',
+    vinicius: 'assets/videos/vinicius-preview.webm',
   };
 
   document.querySelectorAll('[data-project]').forEach((project) => {
