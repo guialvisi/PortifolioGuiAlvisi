@@ -6,20 +6,26 @@
     <meta name="theme-color" content="#0b0b0b">
     <meta name="description" content="Alvisi Dev — design de interfaces e desenvolvimento web. Explore os projetos de Gui Alvisi e planeje sua próxima experiência digital.">
     <title>Alvisi Dev — Design & Desenvolvimento Web</title>
-    <link rel="icon" type="image/png" href="assets/alvisi-dev-logo.png?v=2">
     <link rel="icon" type="image/svg+xml" sizes="any" href="favicon.svg?v=2">
-    <link rel="stylesheet" href="style.css?v=12">
-    <script src="script.js?v=9" defer></script>
+    <link rel="stylesheet" href="style.css?v=21">
+    <script src="script.js?v=17" defer></script>
   </head>
   <body>
+    <canvas id="bg-canvas" aria-hidden="true"></canvas>
+    <div id="intro-layer" aria-hidden="true" hidden>
+      <div id="intro-squircle">
+        <img id="intro-logo" src="favicon.svg?v=2" alt="" width="80" height="80">
+      </div>
+    </div>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
     <header class="header">
-      <a class="brand" href="#inicio" aria-label="Alvisi Dev, início"><img src="assets/alvisi-dev-logo.png" alt="Alvisi Dev" width="1774" height="887"></a>
+      <a class="brand" href="#inicio" aria-label="Alvisi Dev, início"><img src="favicon.svg?v=2" alt="" width="43" height="43"></a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation" hidden>Menu <span aria-hidden="true">+</span></button>
       <nav id="main-navigation" aria-label="Principal">
         <a href="#projetos">Projetos</a><a href="#servicos">Serviços</a><a href="#sobre">Sobre</a><a class="nav-contact" href="#contato">Iniciar projeto <span>↗</span></a>
       </nav>
     </header>
-    <main>
+    <main id="conteudo" tabindex="-1">
       <section class="hero section" id="inicio">
         <div class="hero-top">
           <span class="eyebrow"><i></i> ALVISI DEV / DESIGN + DESENVOLVIMENTO</span><span class="edition">PORTFÓLIO DIGITAL / 2026</span>
@@ -48,8 +54,8 @@
         </div>
       </div>
       <section class="brand-strip" aria-labelledby="brand-strip-title">
-        <h2 id="brand-strip-title">Projetos que desenvolvi</h2>
-        <div class="brand-strip-list">
+        <h2 id="brand-strip-title" class="reveal">Projetos que desenvolvi</h2>
+        <div class="brand-strip-list reveal">
           <a class="project-brand brand-xuniltech" href="https://guialvisi.github.io/XunilTech/" target="_blank" rel="noopener noreferrer">XunilTech<span aria-hidden="true">↗</span></a>
           <a class="project-brand brand-chocolate" href="https://guialvisi.github.io/ChocolateAraucaria/" target="_blank" rel="noopener noreferrer">Chocolate Araucária<span aria-hidden="true">↗</span></a>
           <a class="project-brand brand-royal" href="https://guialvisi.github.io/Royal-Barber-Shop/" target="_blank" rel="noopener noreferrer">Royal Barber Shop<span aria-hidden="true">↗</span></a>
@@ -70,11 +76,13 @@
           </p>
         </div>
         <div class="project-grid">
-          <article class="project-item project-featured reveal">
+          <article class="project-item project-featured">
           <span class="featured-label">PROJETO EM DESTAQUE / 01</span>
           <a class="project" data-project="xuniltech" href="https://guialvisi.github.io/XunilTech/" target="_blank" rel="noopener noreferrer">
           <div class="project-cover recorded-preview">
-            <img class="project-still" src="assets/previews/xuniltech.webp" alt="Prévia do site XunilTech" width="1400" height="722" loading="lazy">
+            <div class="project-media">
+              <img class="project-still" src="assets/previews/xuniltech.webp" alt="Prévia do site XunilTech" width="1400" height="722" loading="lazy">
+            </div>
             <span class="project-open">Acessar site ↗</span>
           </div>
           <div class="project-caption">
@@ -82,12 +90,12 @@
               XunilTech
             </h3>
             <span>WEB / DESENVOLVIMENTO <b>↗</b></span>
+            <p>Site para um estúdio de design e desenvolvimento web, com apresentação de criações, serviços e informações de contato.</p>
           </div>
           </a>
           <details class="project-details">
             <summary>Detalhes & visualizações <span aria-hidden="true">+</span></summary>
             <div class="project-detail-content">
-              <p>Site para um estúdio de design e desenvolvimento web, com apresentação de criações, serviços e informações de contato.</p>
               <dl>
                 <dt>Direção visual</dt><dd>Azul e ciano sobre fundo escuro, tipografia de destaque e uma abertura centrada na presença digital da marca.</dd>
                 <dt>Na interface</dt><dd>Apresentação do estúdio, navegação por seções e acesso aos serviços.</dd>
@@ -105,10 +113,12 @@
             </div>
           </details>
           </article>
-          <article class="project-item reveal">
+          <article class="project-item">
           <a class="project" data-project="chocolate" href="https://guialvisi.github.io/ChocolateAraucaria/" target="_blank" rel="noopener noreferrer">
           <div class="project-cover recorded-preview">
-            <img class="project-still" src="assets/previews/chocolate.webp" alt="Prévia do site Chocolate Araucária" width="1400" height="722" loading="lazy">
+            <div class="project-media">
+              <img class="project-still" src="assets/previews/chocolate.webp" alt="Prévia do site Chocolate Araucária" width="1400" height="722" loading="lazy">
+            </div>
             <span class="project-open">Acessar site ↗</span>
           </div>
           <div class="project-caption">
@@ -116,12 +126,12 @@
               Chocolate Araucária
             </h3>
             <span>WEB / DESENVOLVIMENTO <b>↗</b></span>
+            <p>Uma experiência digital dedicada à apresentação da Chocolate Araucária e de seus produtos.</p>
           </div>
           </a>
           <details class="project-details">
             <summary>Detalhes & visualizações <span aria-hidden="true">+</span></summary>
             <div class="project-detail-content">
-              <p>Uma experiência digital dedicada à apresentação da Chocolate Araucária e de seus produtos.</p>
               <dl>
                 <dt>Direção visual</dt><dd>Tons de chocolate, vinho e creme, com destaque para a fotografia de produto e a identidade da marca.</dd>
                 <dt>Na interface</dt><dd>Apresentação da marca, destaque para os chocolates e acesso à seção de produtos.</dd>
@@ -139,10 +149,12 @@
             </div>
           </details>
           </article>
-          <article class="project-item reveal">
+          <article class="project-item">
           <a class="project" data-project="royal" href="https://guialvisi.github.io/Royal-Barber-Shop/" target="_blank" rel="noopener noreferrer">
           <div class="project-cover recorded-preview">
-            <img class="project-still" src="assets/previews/royal.webp" alt="Prévia do site Royal Barber Shop" width="1400" height="722" loading="lazy">
+            <div class="project-media">
+              <img class="project-still" src="assets/previews/royal.webp" alt="Prévia do site Royal Barber Shop" width="1400" height="722" loading="lazy">
+            </div>
             <span class="project-open">Acessar site ↗</span>
           </div>
           <div class="project-caption">
@@ -150,12 +162,12 @@
               Royal Barber Shop
             </h3>
             <span>WEB / DESENVOLVIMENTO <b>↗</b></span>
+            <p>Site de barbearia com apresentação da casa, serviços, localização e caminhos para agendar um horário.</p>
           </div>
           </a>
           <details class="project-details">
             <summary>Detalhes & visualizações <span aria-hidden="true">+</span></summary>
             <div class="project-detail-content">
-              <p>Site de barbearia com apresentação da casa, serviços, localização e caminhos para agendar um horário.</p>
               <dl>
                 <dt>Direção visual</dt><dd>Contraste entre azul e fundo escuro, títulos expressivos e chamadas para agendamento.</dd>
                 <dt>Na interface</dt><dd>Navegação para serviços e localização, com atalhos de contato e agendamento.</dd>
@@ -173,10 +185,12 @@
             </div>
           </details>
           </article>
-          <article class="project-item reveal">
+          <article class="project-item">
           <a class="project" data-project="pse" href="https://guialvisi.github.io/PSES-olu-es-Industriais/" target="_blank" rel="noopener noreferrer">
           <div class="project-cover recorded-preview">
-            <img class="project-still" src="assets/previews/pse.webp" alt="Prévia do site PSE Soluções Industriais" width="1400" height="722" loading="lazy">
+            <div class="project-media">
+              <img class="project-still" src="assets/previews/pse.webp" alt="Prévia do site PSE Soluções Industriais" width="1400" height="722" loading="lazy">
+            </div>
             <span class="project-open">Acessar site ↗</span>
           </div>
           <div class="project-caption">
@@ -184,12 +198,12 @@
               PSE Soluções Industriais
             </h3>
             <span>WEB / DESENVOLVIMENTO <b>↗</b></span>
+            <p>Site institucional da PSE Soluções Industriais, com apresentação de serviços de engenharia, manutenção e segurança para o setor industrial.</p>
           </div>
           </a>
           <details class="project-details">
             <summary>Detalhes & visualizações <span aria-hidden="true">+</span></summary>
             <div class="project-detail-content">
-              <p>Site institucional da PSE Soluções Industriais, com apresentação de serviços de engenharia, manutenção e segurança para o setor industrial.</p>
               <dl>
                 <dt>Direção visual</dt><dd>Identidade em azul, títulos de destaque e contraste entre áreas claras e escuras.</dd>
                 <dt>Na interface</dt><dd>Seções de serviços, catálogo de peças, apresentação da empresa e formulário para solicitar uma proposta.</dd>
@@ -207,10 +221,12 @@
             </div>
           </details>
           </article>
-          <article class="project-item reveal">
+          <article class="project-item">
           <a class="project" data-project="vinicius" href="https://guialvisi.github.io/PortifolioViniciusBiasetto/" target="_blank" rel="noopener noreferrer">
           <div class="project-cover recorded-preview">
-            <img class="project-still" src="assets/previews/vinicius.webp" alt="Prévia do portfólio de Vinicius Biasetto" width="1400" height="722" loading="lazy">
+            <div class="project-media">
+              <img class="project-still" src="assets/previews/vinicius.webp" alt="Prévia do portfólio de Vinicius Biasetto" width="1400" height="722" loading="lazy">
+            </div>
             <span class="project-open">Acessar site ↗</span>
           </div>
           <div class="project-caption">
@@ -218,12 +234,12 @@
               Vinicius Biasetto
             </h3>
             <span>WEB / PORTFÓLIO <b>↗</b></span>
+            <p>Portfólio de Vinicius Biasetto.</p>
           </div>
           </a>
           <details class="project-details">
             <summary>Detalhes & visualizações <span aria-hidden="true">+</span></summary>
             <div class="project-detail-content">
-              <p>Portfólio de Vinicius Biasetto.</p>
               <div class="device-preview" data-preview-url="https://guialvisi.github.io/PortifolioViniciusBiasetto/" data-preview-name="Vinicius Biasetto">
                 <p class="preview-label" id="preview-label-vinicius">Explore o site em diferentes telas</p>
                 <div class="device-controls" role="group" aria-labelledby="preview-label-vinicius">
@@ -311,9 +327,9 @@
         </div>
       </section>
       <section class="section statement" aria-label="Sua marca merece uma nova experiência digital">
-        <span class="eyebrow">O PRÓXIMO PASSO DA SUA MARCA</span>
-        <p class="statement-text" aria-hidden="true"><span class="statement-word">SUA</span> <span class="statement-word">MARCA</span> <span class="statement-word">MERECE</span> <span class="statement-word">UMA</span> <span class="statement-word">NOVA</span> <span class="statement-word">EXPERIÊNCIA</span> <span class="statement-word">DIGITAL.</span> </p>
-        <a class="text-link" href="#orcamento">Vamos desenvolver essa ideia <span>↗</span></a>
+        <span class="eyebrow reveal">O PRÓXIMO PASSO DA SUA MARCA</span>
+        <p class="statement-text reveal" aria-hidden="true"><span class="statement-word">SUA</span> <span class="statement-word">MARCA</span> <span class="statement-word">MERECE</span> <span class="statement-word">UMA</span> <span class="statement-word">NOVA</span> <span class="statement-word">EXPERIÊNCIA</span> <span class="statement-word">DIGITAL.</span> </p>
+        <a class="text-link reveal" href="#orcamento">Vamos desenvolver essa ideia <span>↗</span></a>
       </section>
       <section class="about section" id="sobre">
         <div class="about-art portrait reveal">
@@ -380,7 +396,7 @@
         </form>
       </section>
       <section class="contact section" id="contato">
-        <div class="reveal">
+        <div class="contact-credits">
           <span class="eyebrow"><i></i> 06 / VAMOS CONECTAR</span>
           <h2>
             Seu próximo<br>passo é <em>digital.</em>
@@ -395,7 +411,7 @@
       </section>
     </main>
     <footer>
-      <a class="brand" href="#inicio" aria-label="Alvisi Dev, início"><img src="assets/alvisi-dev-logo.png" alt="Alvisi Dev" width="1774" height="887" loading="lazy"></a><span>© <span id="year">2026</span> Gui Alvisi</span><a href="https://www.instagram.com/alvisi.dev/" target="_blank" rel="noopener noreferrer">Instagram ↗</a><a href="#inicio">Retornar ao início ↑</a>
+      <a class="brand" href="#inicio" aria-label="Alvisi Dev, início"><img src="favicon.svg?v=2" alt="" width="43" height="43" loading="lazy"></a><span>© <span id="year">2026</span> Gui Alvisi</span><a href="https://www.instagram.com/alvisi.dev/" target="_blank" rel="noopener noreferrer">Instagram ↗</a><a href="#inicio">Retornar ao início ↑</a>
     </footer>
   </body>
 </html>
