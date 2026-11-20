@@ -9,7 +9,7 @@
   const menuButton = document.querySelector('.menu-toggle');
   const navigation = document.getElementById('main-navigation');
   if (menuButton && navigation) {
-    const mobileNavigation = window.matchMedia('(max-width: 760px)');
+    const mobileNavigation = window.matchMedia('(max-width: 900px)');
     const setMenu = (open) => {
       menuButton.setAttribute('aria-expanded', String(open));
       navigation.classList.toggle('is-open', open);
@@ -217,12 +217,8 @@
     let height;
     let frame;
     const strandColor = getComputedStyle(canvas).getPropertyValue('--gold').trim();
-    const strands = Array.from({ length: 30 }, () => ({
-      periodX: 8 + Math.random() * 6,
-      periodY: 8 + Math.random() * 6,
-      width: 0.8 + Math.random() * 1.7,
-      opacity: 0.08 + Math.random() * 0.26,
-    }));
+    let camera = 0;
+    let lastFrame;
 
     function resizeCanvas() {
       width = canvas.clientWidth;
@@ -231,27 +227,34 @@
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
-      context.globalCompositeOperation = 'lighter';
       context.strokeStyle = strandColor;
     }
 
     function drawCanvas(timestamp) {
-      const time = timestamp / 1600;
-      const count = width < 960 ? 15 : strands.length;
+      const elapsed = Math.min(timestamp - (lastFrame ?? timestamp), 50);
+      lastFrame = timestamp;
+      const scrollAngle = window.scrollY / Math.max(height, 1) * 0.72;
+      camera += (scrollAngle - camera) * (1 - Math.exp(-elapsed / 180));
+      const rotation = timestamp / 3600 + camera;
+      const radius = Math.min(width, height) * 0.36;
+      const count = width < 760 ? 14 : 24;
       context.clearRect(0, 0, width, height);
+
       for (let index = 0; index < count; index += 1) {
-        const strand = strands[index];
-        const swayX = Math.sin(time / strand.periodX);
-        const swayY = Math.cos(time / strand.periodY);
+        const phase = index / (count - 1) * 3.5 - rotation;
+        const near = (Math.cos(phase) + 1) / 2;
+        context.globalAlpha = 0.05 + near ** 2 * 0.32;
+        context.lineWidth = 0.55 + near * 1.15;
         context.beginPath();
-        context.moveTo(-200 + index * width / count + swayX * 100, height + 200);
-        context.bezierCurveTo(
-          width * 0.2 + swayY * 200, height * 0.8,
-          width * 0.8 + swayX * 200, height * 0.2,
-          width + 200, -200 + swayY * 100,
-        );
-        context.lineWidth = strand.width;
-        context.globalAlpha = strand.opacity;
+        for (let step = 0; step <= 40; step += 1) {
+          const u = step / 20 - 1;
+          const angle = phase + u * 3;
+          const perspective = 1 / (1 - Math.cos(angle) * 0.38);
+          const x = width / 2 + u * width * 0.9 * perspective;
+          const y = height / 2 + (Math.sin(angle) * radius - u * height * 0.37) * perspective;
+          if (step === 0) context.moveTo(x, y);
+          else context.lineTo(x, y);
+        }
         context.stroke();
       }
       frame = requestAnimationFrame(drawCanvas);
@@ -259,6 +262,8 @@
 
     function syncCanvas() {
       cancelAnimationFrame(frame);
+      lastFrame = undefined;
+      camera = window.scrollY / Math.max(height, 1) * 0.72;
       if (motionPreference.matches || document.hidden) {
         context.clearRect(0, 0, width, height);
       } else {
@@ -280,24 +285,98 @@
   if (brand && intro?.animate && !motionPreference.matches) {
     document.documentElement.classList.add('has-intro');
     intro.hidden = false;
-    const { left, top, width, height } = brand.getBoundingClientRect();
-    const moveX = left + width / 2 - intro.clientWidth / 2;
-    const moveY = top + height / 2 - intro.clientHeight / 2;
-    const animation = { duration: 1060, delay: 420, easing: 'cubic-bezier(0.76, 0, 0.24, 1)', fill: 'forwards' };
-    squircle.animate([
-      { width: '100%', height: '100%', borderRadius: '0', transform: 'none' },
-      { width: '43px', height: '43px', borderRadius: '12px', transform: `translate(${moveX}px, ${moveY}px)` },
-    ], animation);
+    const turnDuration = 840;
+    intro.style.setProperty('--intro-turn-duration', `${turnDuration}ms`);
+    const animation = { duration: 950, delay: turnDuration, easing: 'cubic-bezier(0.76, 0, 0.24, 1)', fill: 'forwards' };
+    function logoDestination() {
+      const { left, top, width, height } = brand.getBoundingClientRect();
+      const moveX = left + width / 2 - intro.clientWidth / 2;
+      const moveY = top + height / 2 - intro.clientHeight / 2;
+      return [
+        { width: '100%', height: '100%', borderRadius: '0', transform: 'none' },
+        { width: '43px', height: '43px', borderRadius: '12px', transform: `translate(${moveX}px, ${moveY}px)` },
+      ];
+    }
+    const docking = squircle.animate(logoDestination(), animation);
+    function syncLogoDestination() {
+      docking.effect.setKeyframes(logoDestination());
+    }
+    window.addEventListener('resize', syncLogoDestination);
     introLogo.animate([
-      { opacity: 0, transform: 'scale(.6)', filter: 'blur(10px)' },
-      { opacity: 1, transform: 'scale(1)', filter: 'blur(0)' },
-    ], { duration: 420, easing: 'ease-out', fill: 'backwards' });
+      { opacity: 0, transform: 'rotateX(18deg) rotateY(-360deg) scale(.72)' },
+      { opacity: 1, offset: 0.2 },
+      { opacity: 1, transform: 'rotateX(0deg) rotateY(0deg) scale(1)' },
+    ], { duration: turnDuration, easing: 'cubic-bezier(.3, .05, .2, 1)', fill: 'both' });
     introLogo.animate([{ width: '80px' }, { width: '43px' }], animation);
-    intro.animate([{ opacity: 1 }, { opacity: 0 }], {
-      duration: 300,
+
+    const curves = document.getElementById('intro-curves');
+    const scene = curves?.getContext('2d');
+    let introFrame;
+
+    function drawIntroCurves() {
+      const width = curves.clientWidth;
+      const height = curves.clientHeight;
+      const scale = Math.min(window.devicePixelRatio || 1, 2);
+      const pixelWidth = Math.round(width * scale);
+      const pixelHeight = Math.round(height * scale);
+      if (curves.width !== pixelWidth || curves.height !== pixelHeight) {
+        curves.width = pixelWidth;
+        curves.height = pixelHeight;
+      }
+      scene.setTransform(scale, 0, 0, scale, 0, 0);
+      scene.clearRect(0, 0, width, height);
+      scene.lineCap = 'round';
+      const time = introFade.currentTime ?? 0;
+      const progress = Math.min(time / turnDuration, 1);
+      const reveal = Math.min(progress * 6, 1);
+      const exit = 1 - Math.min(Math.max(time - turnDuration, 0) / 720, 1);
+      const sweep = 1 - (1 - progress) ** 3;
+      const radius = Math.min(width, height) * 0.32;
+      const count = width < 760 ? 14 : 23;
+
+      for (let line = 0; line < count; line += 1) {
+        let previous;
+        for (let step = 0; step <= 64; step += 1) {
+          const u = step / 64 * 2 - 1;
+          const angle = u * 3.4 + line / (count - 1) * 3.1 - sweep * 3.8;
+          const depth = Math.cos(angle);
+          const perspective = 1 / (1 - depth * 0.32);
+          const x = width / 2 + u * width * 0.85 * perspective;
+          const y = height / 2 + (Math.sin(angle) * radius - u * height * 0.27) * perspective;
+
+          if (previous) {
+            const light = (depth + 1) / 2;
+            const centerFade = Math.min(Math.hypot(x - width / 2, y - height / 2) / 110, 1);
+            scene.strokeStyle = light > 0.8 ? '#f3d59b' : '#c6a365';
+            scene.globalAlpha = (0.05 + light ** 2 * 0.57) * centerFade * reveal * exit;
+            scene.lineWidth = 0.45 + light * 1.35;
+            scene.beginPath();
+            scene.moveTo(previous.x, previous.y);
+            scene.lineTo(x, y);
+            scene.stroke();
+          }
+          previous = { x, y };
+        }
+      }
+
+      if (exit > 0) introFrame = requestAnimationFrame(drawIntroCurves);
+    }
+
+    function finishIntro() {
+      cancelAnimationFrame(introFrame);
+      motionPreference.removeEventListener('change', finishIntro);
+      window.removeEventListener('resize', syncLogoDestination);
+      intro.remove();
+    }
+
+    motionPreference.addEventListener('change', finishIntro);
+    const introFade = intro.animate([{ opacity: 1 }, { opacity: 0 }], {
+      duration: 220,
       delay: animation.duration + animation.delay,
       fill: 'forwards',
-    }).onfinish = () => intro.remove();
+    });
+    introFade.onfinish = finishIntro;
+    if (scene) introFrame = requestAnimationFrame(drawIntroCurves);
   }
 
   // Content stays visible when animations are disabled or unsupported.
@@ -360,8 +439,8 @@
   progress.setAttribute('aria-hidden', 'true');
   document.body.append(progress);
   const parallaxViewport = window.matchMedia('(min-width: 761px) and (not (pointer: coarse))');
-  const parallaxTargets = document.querySelectorAll('.portrait, .contact');
-  const movingTracks = document.querySelectorAll('.marquee, .showcase-window');
+  const parallaxTargets = document.querySelectorAll('.portrait');
+  const movingTracks = document.querySelectorAll('.marquee, .showcase-window, .code-scene');
   const visibleLayers = new Set();
   let scrollFrame = 0;
   const updateScroll = () => {
@@ -385,7 +464,7 @@
   };
   const layerObserver = new IntersectionObserver((entries) => {
     entries.forEach(({ target, isIntersecting }) => {
-      if (target.matches('.marquee, .showcase-window')) {
+      if (target.matches('.marquee, .showcase-window, .code-scene')) {
         target.classList.toggle('track-offscreen', !isIntersecting);
       } else if (isIntersecting) {
         visibleLayers.add(target);
