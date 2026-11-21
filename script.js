@@ -127,6 +127,62 @@
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
   const revealElements = document.querySelectorAll('.reveal');
 
+  const portal = document.getElementById('project-portal');
+  const studio = document.querySelector('.mini-studio');
+  const portalCover = portal?.querySelector('.portal-cover');
+  const portalImage = portal?.querySelector('.portal-image');
+  let portalTrigger;
+  let portalAnimation;
+  let studioFlight;
+
+  if (typeof portal?.showModal === 'function') {
+    document.documentElement.classList.add('portals-ready');
+
+    portal.addEventListener('close', () => {
+      portalAnimation?.cancel();
+      studioFlight?.cancel();
+      studioFlight = undefined;
+      portalTrigger?.focus({ preventScroll: true });
+    });
+
+    portal.addEventListener('click', (event) => {
+      if (event.target === portal) portal.close();
+    });
+
+    motionPreference.addEventListener('change', () => {
+      if (!motionPreference.matches) return;
+      portalAnimation?.cancel();
+      studioFlight?.finish();
+    });
+  }
+
+  function openPortal(project, trigger = project, origin = project.querySelector('.project-media')) {
+    const thumbnail = project.querySelector('.project-still');
+    const frame = origin.getBoundingClientRect();
+    portalTrigger = trigger;
+    portal.dataset.project = project.dataset.project;
+    portalImage.src = thumbnail.currentSrc || thumbnail.src;
+    portalImage.alt = thumbnail.alt;
+    portal.querySelector('#portal-title').textContent = project.querySelector('h3').textContent.trim();
+    portal.querySelector('.portal-caption p').textContent = project.querySelector('.project-caption p').textContent;
+    portal.querySelector('.portal-site').href = project.href;
+    portal.showModal();
+
+    if (motionPreference.matches || !portalCover.animate || !frame.width || !frame.height) return;
+    const cover = portalCover.getBoundingClientRect();
+    const offsetX = frame.left - cover.left;
+    const offsetY = frame.top - cover.top;
+    const scaleX = frame.width / cover.width;
+    const scaleY = frame.height / cover.height;
+    portalAnimation = portalCover.animate([
+      {
+        transform: `translate(${offsetX}px, ${offsetY}px) scale(${scaleX}, ${scaleY})`,
+        boxShadow: '0 0 0 3px var(--portal-accent)',
+      },
+      { transform: 'none' },
+    ], { duration: 610, easing: 'cubic-bezier(.23, .75, .22, 1)' });
+  }
+
   // Project recordings load only when a preview is requested.
   const projectVideos = {
     xuniltech: 'assets/videos/xuniltech.webm',
@@ -136,7 +192,91 @@
     vinicius: 'assets/videos/vinicius-preview.webm',
   };
 
-  document.querySelectorAll('[data-project]').forEach((project) => {
+  const projects = document.querySelectorAll('.project[data-project]');
+
+  if (studio && typeof portal?.showModal === 'function') {
+    const stage = studio.querySelector('.studio-stage');
+    const set = studio.querySelector('.studio-set');
+    const projectById = new Map([...projects].map((project) => [project.dataset.project, project]));
+    studio.hidden = false;
+
+    if ('IntersectionObserver' in window) {
+      const studioObserver = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) return;
+        studio.classList.add('is-lit');
+        studioObserver.disconnect();
+      }, { threshold: 0.15 });
+      studioObserver.observe(stage);
+    } else {
+      studio.classList.add('is-lit');
+    }
+
+    const resetStudioTilt = () => {
+      stage.style.removeProperty('--studio-pitch');
+      stage.style.removeProperty('--studio-yaw');
+    };
+
+    stage.addEventListener('pointermove', (event) => {
+      if (event.pointerType !== 'mouse' || motionPreference.matches || studioFlight || portal.open) return;
+      const bounds = stage.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width - .5;
+      const y = (event.clientY - bounds.top) / bounds.height - .5;
+      stage.style.setProperty('--studio-pitch', `${-y * 11}deg`);
+      stage.style.setProperty('--studio-yaw', `${x * 14}deg`);
+    });
+    stage.addEventListener('pointerleave', () => {
+      if (!studioFlight) resetStudioTilt();
+    });
+    portal.addEventListener('close', resetStudioTilt);
+    motionPreference.addEventListener('change', resetStudioTilt);
+
+    studio.querySelectorAll('.studio-object').forEach((object) => {
+      const project = projectById.get(object.dataset.project);
+      const model = object.querySelector('.studio-model');
+
+      object.addEventListener('click', async () => {
+        if (studioFlight || portal.open) return;
+        if (motionPreference.matches || !set.animate) {
+          openPortal(project, object, model);
+          return;
+        }
+
+        studio.classList.add('is-lit');
+        const scene = set.getBoundingClientRect();
+        const detail = model.getBoundingClientRect();
+        const visibleCenterY = (Math.max(scene.top, 0) + Math.min(scene.bottom, window.innerHeight)) / 2;
+        const x = scene.left + scene.width / 2 - detail.left - detail.width / 2;
+        const y = visibleCenterY - detail.top - detail.height / 2;
+        const origin = `${detail.left + detail.width / 2 - scene.left}px ${detail.top + detail.height / 2 - scene.top}px`;
+
+        const flight = set.animate([
+          { transform: 'none', transformOrigin: origin },
+          { transform: `translate(${x}px, ${y}px) scale(2.35)`, transformOrigin: origin },
+        ], { duration: 440, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'forwards' });
+        studioFlight = flight;
+        try {
+          await flight.finished;
+        } catch {
+          return;
+        }
+        if (studioFlight !== flight || portal.open) return;
+        openPortal(project, object, model);
+      });
+    });
+  }
+
+  projects.forEach((project) => {
+    if (typeof portal?.showModal === 'function') {
+      project.setAttribute('aria-haspopup', 'dialog');
+      project.addEventListener('click', (event) => {
+        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        studioFlight?.cancel();
+        studioFlight = undefined;
+        openPortal(project);
+      });
+    }
+
     const source = projectVideos[project.dataset.project];
     if (!source) return;
 
@@ -162,7 +302,7 @@
       project.classList.remove('is-playing');
     };
     const play = async () => {
-      if (motionPreference.matches || document.hidden) return;
+      if (motionPreference.matches || document.hidden || portal?.open) return;
       active = true;
       const request = ++playbackRequest;
       if (!video.getAttribute('src')) {
@@ -191,6 +331,7 @@
     project.addEventListener('focus', play);
     project.addEventListener('blur', stop);
     video.addEventListener('error', stop);
+    portal?.addEventListener('focusin', stop);
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) stop();
     });

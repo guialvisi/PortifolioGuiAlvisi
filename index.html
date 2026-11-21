@@ -7,8 +7,8 @@
     <meta name="description" content="Alvisi Dev — design de interfaces e desenvolvimento web. Explore os projetos de Gui Alvisi e planeje sua próxima experiência digital.">
     <title>Alvisi Dev — Design & Desenvolvimento Web</title>
     <link rel="icon" type="image/svg+xml" sizes="any" href="favicon.svg?v=2">
-    <link rel="stylesheet" href="style.css?v=26">
-    <script src="script.js?v=22" defer></script>
+    <link rel="stylesheet" href="style.css?v=29">
+    <script src="script.js?v=25" defer></script>
   </head>
   <body>
     <canvas id="bg-canvas" aria-hidden="true"></canvas>
@@ -90,9 +90,42 @@
             </h2>
           </div>
           <p>
-            Cinco projetos. Cinco experiências digitais.<br>Explore as prévias e acesse os sites completos.
+            Cinco projetos. Cinco experiências digitais.<br>Entre nos projetos e acesse os sites completos.
           </p>
         </div>
+        <section class="mini-studio" aria-labelledby="studio-title" hidden>
+          <header class="studio-heading">
+            <h3 id="studio-title">Estúdio em miniatura</h3>
+            <p>Selecione um objeto da maquete para explorar o projeto.</p>
+          </header>
+          <div class="studio-stage">
+            <div class="studio-set">
+              <div class="studio-platform" aria-hidden="true"></div>
+              <div class="studio-objects">
+                <button class="studio-object" type="button" data-project="xuniltech" aria-haspopup="dialog">
+                  <span class="studio-plinth" aria-hidden="true"><span class="studio-model studio-terminal"></span></span>
+                  <span class="studio-name">XunilTech</span>
+                </button>
+                <button class="studio-object" type="button" data-project="chocolate" aria-haspopup="dialog">
+                  <span class="studio-plinth" aria-hidden="true"><span class="studio-model studio-chocolate"></span></span>
+                  <span class="studio-name">Chocolate Araucária</span>
+                </button>
+                <button class="studio-object" type="button" data-project="royal" aria-haspopup="dialog">
+                  <span class="studio-plinth" aria-hidden="true"><span class="studio-model studio-pole"></span></span>
+                  <span class="studio-name">Royal Barber Shop</span>
+                </button>
+                <button class="studio-object" type="button" data-project="pse" aria-haspopup="dialog">
+                  <span class="studio-plinth" aria-hidden="true"><span class="studio-model studio-machine"></span></span>
+                  <span class="studio-name">PSE Soluções Industriais</span>
+                </button>
+                <button class="studio-object" type="button" data-project="vinicius" aria-haspopup="dialog">
+                  <span class="studio-plinth" aria-hidden="true"><span class="studio-model studio-frame"></span></span>
+                  <span class="studio-name">Vinicius Biasetto</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
         <div class="project-grid">
           <article class="project-item project-featured">
           <span class="featured-label">PROJETO EM DESTAQUE / 01</span>
@@ -101,7 +134,7 @@
             <div class="project-media">
               <img class="project-still" src="assets/previews/xuniltech.webp" alt="Prévia do site XunilTech" width="1400" height="722" loading="lazy">
             </div>
-            <span class="project-open">Acessar site ↗</span>
+            <span class="project-open"><span class="project-link-label">Acessar site ↗</span><span class="project-portal-label">Entrar no projeto</span></span>
           </div>
           <div class="project-caption">
             <h3>
@@ -137,7 +170,7 @@
             <div class="project-media">
               <img class="project-still" src="assets/previews/chocolate.webp" alt="Prévia do site Chocolate Araucária" width="1400" height="722" loading="lazy">
             </div>
-            <span class="project-open">Acessar site ↗</span>
+            <span class="project-open"><span class="project-link-label">Acessar site ↗</span><span class="project-portal-label">Entrar no projeto</span></span>
           </div>
           <div class="project-caption">
             <h3>
@@ -173,7 +206,7 @@
             <div class="project-media">
               <img class="project-still" src="assets/previews/royal.webp" alt="Prévia do site Royal Barber Shop" width="1400" height="722" loading="lazy">
             </div>
-            <span class="project-open">Acessar site ↗</span>
+            <span class="project-open"><span class="project-link-label">Acessar site ↗</span><span class="project-portal-label">Entrar no projeto</span></span>
           </div>
           <div class="project-caption">
             <h3>
@@ -209,7 +242,7 @@
             <div class="project-media">
               <img class="project-still" src="assets/previews/pse.webp" alt="Prévia do site PSE Soluções Industriais" width="1400" height="722" loading="lazy">
             </div>
-            <span class="project-open">Acessar site ↗</span>
+            <span class="project-open"><span class="project-link-label">Acessar site ↗</span><span class="project-portal-label">Entrar no projeto</span></span>
           </div>
           <div class="project-caption">
             <h3>
@@ -245,7 +278,7 @@
             <div class="project-media">
               <img class="project-still" src="assets/previews/vinicius.webp" alt="Prévia do portfólio de Vinicius Biasetto" width="1400" height="722" loading="lazy">
             </div>
-            <span class="project-open">Acessar site ↗</span>
+            <span class="project-open"><span class="project-link-label">Acessar site ↗</span><span class="project-portal-label">Entrar no projeto</span></span>
           </div>
           <div class="project-caption">
             <h3>
@@ -439,6 +472,23 @@
         <a class="brand-mega" href="#orcamento" aria-label="Alvisi Dev — iniciar projeto">ALVISI DEV<span aria-hidden="true">ALVISI DEV</span></a>
       </section>
     </main>
+    <dialog class="project-portal" id="project-portal" aria-labelledby="portal-title">
+      <div class="portal-header">
+        <form method="dialog">
+          <button type="submit" class="portal-close" autofocus>Voltar aos projetos</button>
+        </form>
+      </div>
+      <div class="portal-cover">
+        <img class="portal-image" src="assets/previews/xuniltech.webp" loading="lazy" width="1400" height="722" alt="">
+      </div>
+      <div class="portal-caption">
+        <div>
+          <h2 id="portal-title"></h2>
+          <p></p>
+        </div>
+        <a class="portal-site" target="_blank" rel="noopener noreferrer">Acessar site</a>
+      </div>
+    </dialog>
     <footer>
       <a class="brand" href="#inicio" aria-label="Alvisi Dev, início"><img src="favicon.svg?v=2" alt="" width="43" height="43" loading="lazy"></a><span>© <span id="year">2026</span> Gui Alvisi</span><a href="https://www.instagram.com/alvisi.dev/" target="_blank" rel="noopener noreferrer">Instagram ↗</a><a href="#inicio">Retornar ao início ↑</a>
     </footer>
