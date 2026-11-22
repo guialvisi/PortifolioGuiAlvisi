@@ -134,14 +134,21 @@
   let portalTrigger;
   let portalAnimation;
   let studioFlight;
+  let studioSelection;
+
+  function resetStudioCamera() {
+    studioFlight?.cancel();
+    studioFlight = undefined;
+    studioSelection?.classList.remove('is-selected');
+    studioSelection = undefined;
+  }
 
   if (typeof portal?.showModal === 'function') {
     document.documentElement.classList.add('portals-ready');
 
     portal.addEventListener('close', () => {
       portalAnimation?.cancel();
-      studioFlight?.cancel();
-      studioFlight = undefined;
+      resetStudioCamera();
       portalTrigger?.focus({ preventScroll: true });
     });
 
@@ -224,6 +231,7 @@
       stage.style.setProperty('--studio-pitch', `${-y * 11}deg`);
       stage.style.setProperty('--studio-yaw', `${x * 14}deg`);
     });
+    studio.addEventListener('focusin', () => studio.classList.add('is-lit'));
     stage.addEventListener('pointerleave', () => {
       if (!studioFlight) resetStudioTilt();
     });
@@ -242,16 +250,25 @@
         }
 
         studio.classList.add('is-lit');
+        studioSelection = object;
+        object.classList.add('is-selected');
         const scene = set.getBoundingClientRect();
         const detail = model.getBoundingClientRect();
-        const visibleCenterY = (Math.max(scene.top, 0) + Math.min(scene.bottom, window.innerHeight)) / 2;
-        const x = scene.left + scene.width / 2 - detail.left - detail.width / 2;
-        const y = visibleCenterY - detail.top - detail.height / 2;
-        const origin = `${detail.left + detail.width / 2 - scene.left}px ${detail.top + detail.height / 2 - scene.top}px`;
+        const header = document.querySelector('.header');
+        const headerBottom = header?.getBoundingClientRect().bottom ?? 0;
+        const stageTop = Math.max(scene.top, headerBottom, 0);
+        const stageBottom = Math.min(scene.bottom, window.innerHeight);
+        const visibleCenterY = stageTop < stageBottom ? (stageTop + stageBottom) / 2 : (scene.top + scene.bottom) / 2;
+        const detailX = detail.left + detail.width / 2;
+        const detailY = detail.top + detail.height / 2;
+        const x = scene.left + scene.width / 2 - detailX;
+        const y = visibleCenterY - detailY;
+        const origin = `${detailX - scene.left}px ${detailY - scene.top}px`;
+        const zoom = Math.min(2.35, scene.width / (detail.width * 1.6));
 
         const flight = set.animate([
           { transform: 'none', transformOrigin: origin },
-          { transform: `translate(${x}px, ${y}px) scale(2.35)`, transformOrigin: origin },
+          { transform: `translate(${x}px, ${y}px) scale(${zoom})`, transformOrigin: origin },
         ], { duration: 440, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'forwards' });
         studioFlight = flight;
         try {
@@ -271,8 +288,7 @@
       project.addEventListener('click', (event) => {
         if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
-        studioFlight?.cancel();
-        studioFlight = undefined;
+        resetStudioCamera();
         openPortal(project);
       });
     }

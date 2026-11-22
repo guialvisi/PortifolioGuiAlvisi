@@ -3566,6 +3566,20 @@ html:has(.project-portal[open]) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .studio-set {
+    padding: 24px 12px 22px;
+  }
+
+  .studio-objects {
+    row-gap: 12px;
+  }
+
+  .studio-object {
+    min-height: 0;
+    gap: 12px;
+    padding: 8px 4px 4px;
+  }
+
   .studio-object:nth-child(even) {
     margin-bottom: 0;
   }
@@ -3609,7 +3623,7 @@ html:has(.project-portal[open]) {
   .studio-object:nth-child(4) { --studio-delay: 210ms; }
   .studio-object:nth-child(5) { --studio-delay: 280ms; }
 
-  .is-lit .studio-plinth {
+  .is-lit .studio-object:not(:focus-visible, .is-selected) .studio-plinth {
     animation: studio-arrival 650ms cubic-bezier(.2, .72, .28, 1) var(--studio-delay, 0ms) backwards;
   }
 
@@ -3617,12 +3631,23 @@ html:has(.project-portal[open]) {
     transition: filter 220ms ease, translate 320ms ease, rotate 320ms ease;
   }
 
-  .studio-object:is(:hover, :focus-visible) .studio-model {
+  .studio-object:is(:focus-visible, .is-selected) .studio-model {
     translate: 0 -12px;
     rotate: y 22deg;
   }
 
-  .studio-object:is(:hover, :focus-visible) .studio-pole {
+  .studio-object.is-selected .studio-model {
+    transition: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .studio-object:hover .studio-model {
+      translate: 0 -12px;
+      rotate: y 22deg;
+    }
+  }
+
+  .studio-object:is(:hover, :focus-visible, .is-selected) .studio-pole {
     animation: studio-pole-spin 950ms linear infinite;
   }
 
@@ -3633,7 +3658,7 @@ html:has(.project-portal[open]) {
 
   @keyframes studio-arrival {
     from {
-      opacity: 0;
+      opacity: .55;
       transform: perspective(350px) translate3d(0, 24px, -65px) rotateX(-32deg);
     }
     to {
